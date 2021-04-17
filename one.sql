@@ -60,3 +60,10 @@ from delivery,
      supplier
 where delivery.p_id = product.p_id and supplier.s_id=delivery.s_id;
 
+
+-- sum of red items
+select * from product;
+select count(*) as items_amount
+from product
+where p_color='red';
+
