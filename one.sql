@@ -1,4 +1,4 @@
--- table creation
+-- table creation ==============================================
 create table supplier
 (
     s_id   serial primary key,
@@ -29,7 +29,7 @@ SELECT *
 FROM information_schema.tables
 WHERE table_schema = 'public';
 
--- populate data
+-- populate data ==============================================
 insert into supplier (s_name, s_city)
 VALUES ('Yossi Kohen', 'HA'),
        ('maya Levi', 'BS'),
@@ -52,7 +52,7 @@ values (1, 1, 320),
 
 
 
--- Question and answers
+-- Question and answers ===================================
 
 select p_name, p_color, p_unit_price, s_name
 from delivery,
