@@ -51,19 +51,28 @@ values (1, 1, 320),
        (2, 3, 250);
 
 
-
 -- Question and answers ===================================
 
 select p_name, p_color, p_unit_price, s_name
 from delivery,
      product,
      supplier
-where delivery.p_id = product.p_id and supplier.s_id=delivery.s_id;
+where delivery.p_id = product.p_id
+  and supplier.s_id = delivery.s_id;
 
 
 -- sum of red items
-select * from product;
+select *
+from product;
 select count(*) as items_amount
 from product
-where p_color='red';
+where p_color = 'red';
 
+-- must have privileges
+ALTER DATABASE mmn11 SET datestyle TO 'ISO, DMY';
+select current_date;
+
+-- find all supplier name and quantity , that provide product 'notebook'
+select supplier.s_name, d_quantity
+from supplier, delivery, product
+where product.p_name='notebook' and product.p_id=delivery.p_id and delivery.s_id=supplier.s_id;
