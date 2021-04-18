@@ -56,12 +56,13 @@ where d_quantity between 50 and 100
 -- find supplier that deliver red and NOT deliver black items ?
 
 -- who delivered all items that supplier 1 delivered ?
+-- מי מכיל את כל המוצרים של ספק 1
 select s_id
 from supplier s1
 where s_id <> 1 -- loop of all suppliers that not 1
   and not exists
     (
-        -- return list all products that supplier 1 have but supplier other not
+    -- return list all products that supplier 1 have but supplier other not
         select p_id
         from delivery
         where s_id = 1
@@ -73,4 +74,22 @@ where s_id <> 1 -- loop of all suppliers that not 1
                   where d1.s_id = s1.s_id
               )
     );
+
+
+-- supplier id that all products that he delivered, delivered to with supplier 1
+select s_id
+from supplier s
+where s_id <> 1
+  and s_id not in
+      (
+          select s_id
+          from delivery
+          where p_id not in
+                (
+                    select p_id
+                    from delivery
+                    where s_id = 1
+                )
+      );
+
 
