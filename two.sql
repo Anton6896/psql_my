@@ -61,15 +61,15 @@ from supplier s1
 where s_id <> 1 -- loop of all suppliers that not 1
   and not exists
     (
-    -- get all products that have 1 and not have an another
-        select *
+        -- return list all products that supplier 1 have but supplier other not
+        select p_id
         from delivery
         where s_id = 1
           and p_id not in
               (
+                  -- return list of all products that supplier<>1 have
                   select p_id
                   from delivery d1
-                       -- all products that supplier<>1 have
                   where d1.s_id = s1.s_id
               )
     );
