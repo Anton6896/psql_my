@@ -5,6 +5,9 @@ from delivery;
 select *
 from product;
 
+insert into delivery (s_id, p_id, d_quantity)
+VALUES (3, 1, 56);
+
 -- what amount of products deliver supplier 1
 select count(*) as sp1qty
 from delivery
@@ -40,11 +43,34 @@ order by s_id;
 
 -- get supplier id that deliver green product at range 50 - 100
 select s_id
-from delivery
+from delivery d
 where d_quantity between 50 and 100
   and p_id in
       (
-          select p_id
+          select p_id -- all green items
           from product
           where p_color = 'green'
       );
+
+
+-- find supplier that deliver red and NOT deliver black items ?
+
+-- who delivered all items that supplier 1 delivered ?
+select s_id
+from supplier s1
+where s_id <> 1 -- loop of all suppliers that not 1
+  and not exists
+    (
+    -- get all products that have 1 and not have an another
+        select *
+        from delivery
+        where s_id = 1
+          and p_id not in
+              (
+                  select p_id
+                  from delivery d1
+                       -- all products that supplier<>1 have
+                  where d1.s_id = s1.s_id
+              )
+    );
+
