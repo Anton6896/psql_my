@@ -66,16 +66,18 @@ create table booked
 
 -- population
 insert into events (title, date, time) VALUES ('testEvent', '1/18/1999', '04:05');
+insert into agent (aname, address) VALUES ('name', 'address');
 
 
-
-
+copy agent from '/tmp/pgcsv/MOCK_DATA.csv' with (format csv); -- ant1 have no permissions Fedora
 
 
 
 
 
 -- questions
+
+-- find title from last festival that ws at 2019
 
 
 
