@@ -100,16 +100,19 @@ select distinct s1.s_id, s2.s_id
 from supplier s1,
      supplier s2
 where s1.s_id <> s2.s_id
-  and s1.s_id not in
+  and s1.s_id not in -- supplier that have all products that second have
       (
+          -- return all suppliers that they products not in the list
           select s_id
           from delivery
           where p_id not in
                 (
+                    -- return all products from second supplier
                     select p_id
                     from delivery
                     where s_id = s2.s_id
                 ))
+  -- same logic that before
   and s2.s_id not in
       (
           select s_id
