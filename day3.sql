@@ -45,11 +45,15 @@ create table festival
     end_date   date
 );
 
+
 create table events
 (
-    title varchar(40) primary key,
+    -- (many to many)
+    title varchar(40),
     date  date,
-    time  time
+    time  time,
+    primary key (title, date, time),
+    foreign key (title) references festival (title)
 );
 
 create table booked
@@ -64,21 +68,48 @@ create table booked
 
 );
 
--- population
-insert into events (title, date, time) VALUES ('testEvent', '1/18/1999', '04:05');
-insert into agent (aname, address) VALUES ('name', 'address');
+-- population  ====================================================================
+insert into events (title, date, time)
+VALUES ('testEvent', '1/18/1999', '04:05');
+insert into agent (aname, address)
+VALUES ('name', 'address');
 
 
-copy agent from '/tmp/pgcsv/MOCK_DATA.csv' with (format csv); -- ant1 have no permissions Fedora
+copy agent from '/tmp/pgcsv/MOCK_DATA.csv' with (format csv);
+-- ant1 have no permissions on Fedora (i cant populate this now)
 
 
+-- questions ================================================================
 
+-- find title from LAST festival that was at 2019
+select title
+from festival
+where date_part('year', start_date) = 2019
+   or date_part('year', end_date) = 2019
+    and end_date >= all -- look for the last one that was at 2019
+        (
+            -- return all festival dates from 2029 (or mentioned 2019 )
+            select end_date
+            from festival
+            where date_part('year', start_date) = 2019
+               or date_part('year', end_date) = 2019
+        );
 
+-- find festival with one event only
+select *
+from festival f
+         join events e on f.title = e.title
+where not exists
+    (
+    -- same festival but different date or time
+        select title
+        from events
+        where title = f.title
+            and date <> e.date
+           or time <> e.time
+    );
 
--- questions
-
--- find title from last festival that ws at 2019
-
-
-
-
+-- look for the number of events for ech festival
+select title, count(*) total_events
+from events
+group by title;
