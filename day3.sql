@@ -113,3 +113,17 @@ where not exists
 select title, count(*) total_events
 from events
 group by title;
+
+-- find for all singer that also instrumentalist at amount of instruments that he use
+select mid, count(*) tot_instruments
+from singer
+         natural join instrumentalist
+group by mid;
+
+-- look for the average salary for ech festival that was at he dead sea
+-- and show the end date for ech of them
+select title, end_date, avg(salary) average_selary
+from booked
+         join festival using (title)
+where place = 'dead sea'
+group by title, end_date;
