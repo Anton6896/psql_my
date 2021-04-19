@@ -93,3 +93,31 @@ where s_id <> 1
       );
 
 
+
+-- הכלה דו כיונית
+-- get 2 suppliers that deliver same products
+select distinct s1.s_id, s2.s_id
+from supplier s1,
+     supplier s2
+where s1.s_id <> s2.s_id
+  and s1.s_id not in
+      (
+          select s_id
+          from delivery
+          where p_id not in
+                (
+                    select p_id
+                    from delivery
+                    where s_id = s2.s_id
+                ))
+  and s2.s_id not in
+      (
+          select s_id
+          from delivery
+          where p_id not in
+                (
+                    select p_id
+                    from delivery
+                    where s_id = s1.s_id
+                ));
+
