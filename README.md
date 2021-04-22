@@ -1,2 +1,2 @@
 # psql_my
-learn postgresql
+remember the postgresql
